@@ -9,6 +9,9 @@ import sys
 app = Flask(__name__)
 CORS(app)
 
+# Add auto-reload support
+app.config["DEBUG"] = True
+
 # Get MongoDB URI from environment variable with fallback to mongodb container
 MONGODB_URI = os.environ.get('MONGODB_URI', 'mongodb://mongodb:27017/formdb')
 print(f"Using MongoDB URI: {MONGODB_URI.split('@')[0].split('://')[0]}://*****@{MONGODB_URI.split('@')[-1] if '@' in MONGODB_URI else MONGODB_URI.split('://')[-1]}")
@@ -87,4 +90,11 @@ def get_submissions():
         return jsonify({"error": str(e)}), 500
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5001, debug=True)
+    # Enable extra file watching for all Python files in the project
+    extra_files = []
+    for root, dirs, files in os.walk("."):
+        for filename in files:
+            if filename.endswith(".py"):
+                extra_files.append(os.path.join(root, filename))
+                
+    app.run(host='0.0.0.0', port=5001, debug=True, extra_files=extra_files)

@@ -5,6 +5,12 @@ import os
 app = Flask(__name__)
 app.secret_key = 'supersecretkey'
 
+# Enable extra reloader files to watch
+extra_files = []
+for root, dirs, files in os.walk("templates"):
+    for filename in files:
+        extra_files.append(os.path.join(root, filename))
+
 BACKEND_URL = os.environ.get('BACKEND_URL', 'http://localhost:5001')
 
 @app.route('/')
@@ -49,4 +55,4 @@ def submit():
     return render_template('submit.html')
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    app.run(host='0.0.0.0', port=5000, debug=True, extra_files=extra_files)
