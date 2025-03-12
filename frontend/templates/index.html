@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form Submission App</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 10px;
+        }
+        .btn {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+        .flash-messages {
+            margin-bottom: 20px;
+        }
+        .flash-message {
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 4px;
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        .flash-message.success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        .submission {
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 4px;
+        }
+        .submission-date {
+            color: #666;
+            font-size: 0.8em;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Form Submissions</h1>
+        <a href="{{ url_for('submit') }}" class="btn">New Submission</a>
+    </div>
+
+    <div class="flash-messages">
+        {% for message in get_flashed_messages() %}
+            <div class="flash-message {% if 'success' in message.lower() %}success{% endif %}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    </div>
+
+    <div class="submissions">
+        {% if submissions %}
+            {% for submission in submissions %}
+                <div class="submission">
+                    <div class="submission-content">{{ submission.content }}</div>
+                    <div class="submission-date">Submitted: {{ submission.created_at }}</div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p>No submissions yet.</p>
+        {% endif %}
+    </div>
+</body>
+</html>
